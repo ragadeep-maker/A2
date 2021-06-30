@@ -48,7 +48,7 @@ def prober_snmp():
                     if observed_oids[k].snmp_type == 'COUNTER32':
                         calculated_oid = calculated_oid + 2**32
                         print(str(t_start)+"|"+str(calculated_oid/overall_time)+"|")
-                    elif observed_oid[k].snmp_type == 'COUNTER64':
+                    elif observed_oids[k].snmp_type == 'COUNTER64':
                         calculated_oid = calculated_oid + 2**64
                         print(str(t_start)+"|"+str(calculated_oid/overall_time)+"|")
                 else:
