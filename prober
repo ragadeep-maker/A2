@@ -2,6 +2,11 @@
 import sys,easysnmp,time
 from easysnmp import Session
 
+#%%%%%% importing functions %%%%%%%%%#
+
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
+
+
 cl_terms = sys.argv
 choosen_cl_terms = cl_terms[1]
 cl_details = choosen_cl_terms.split(':')
@@ -16,9 +21,13 @@ oids = []
 past_list_oids = []
 present_list_oids = []
 
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
+
 for k in range(4,len(cl_terms)):
 	oids.append(cl_terms[k])
 oids.insert(0,'1.3.6.1.2.1.1.3.0')
+
+# %Counting oids given in CL%
 
 def prober_snmp():
     global present_list_oids
@@ -46,6 +55,8 @@ def prober_snmp():
                     print(str(t_start)+"|"+str(calculated_rate_oid)+"|")
     present_list_oids = past_list_oids
     next = t_start
+# %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#	
+	
 
 if int(number_of_samples) == -1:
     count = 0
