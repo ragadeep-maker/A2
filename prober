@@ -31,7 +31,7 @@ oids.insert(0,'1.3.6.1.2.1.1.3.0')
 
 def prober_snmp():
     global present_list_oids
-    global next
+    global present_occurance_time
 
     session = Session(hostname=snmp_agent_ip,remote_port=port_number,community=community_type,version=2,timeout=1,retries=1)
     observed_oids = session.get(oids)
@@ -42,19 +42,19 @@ def prober_snmp():
             past_list_oids.append(int(observed_oids[k].value))
             if count !=0 and len(present_list_oids)>0:
                 calculated_oid = int(past_list_oids[k-1])-int(present_list_oids[k-1])
-                overall_time = round(t_start-next,1)
+                overall_time = round(t_start-present_occurance_time,1)
                 calculated_rate_oid = int(calculated_oid/overall_time)
                 if calculated_rate_oid < 0:
                     if observed_oids[k].snmp_type == 'COUNTER32':
                         calculated_oid = calculated_oid + 2**32
-                        print(str(t_start)+"|"+str(calculated_oid/overall_time)+"|")
+                        print(str(occured_time)+"|"+str(calculated_oid/overall_time)+"|")
                     elif observed_oids[k].snmp_type == 'COUNTER64':
                         calculated_oid = calculated_oid + 2**64
-                        print(str(t_start)+"|"+str(calculated_oid/overall_time)+"|")
+                        print(str(occured_time)+"|"+str(calculated_oid/overall_time)+"|")
                 else:
-                    print(str(t_start)+"|"+str(calculated_rate_oid)+"|")
+                    print(str(occured_time)+"|"+str(calculated_rate_oid)+"|")
     present_list_oids = past_list_oids
-    next = t_start
+    present_occurance_time = occured_time
 # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#	
 	
 
@@ -62,18 +62,18 @@ if int(number_of_samples) == -1:
     count = 0
     present_list_oids = []
     while True:
-        t_start = time.time()
+        occured_time = time.time()
         prober_snmp()
-        t_end = time.time()
+        feedback_time = time.time()
         count = count + 1
-        time.sleep(abs(time_of_sampling - t_end + t_start))
+        time.sleep(abs(time_of_sampling - feedback_time + occured_time))
 else:
     present_list_oids = []
     for count in range (0, number_of_samples+1):
-        t_start = time.time()
+        occured_time = time.time()
         prober_snmp()
-        t_end = time.time()
-        time.sleep(abs(time_of_sampling - t_end + t_start))
+        feedback_time = time.time()
+        time.sleep(abs(time_of_sampling - feedback_time + occured_time))
 
 
 
