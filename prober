@@ -42,7 +42,7 @@ def prober_snmp():
             past_list_oids.append(int(observed_oids[k].value))
             if count !=0 and len(present_list_oids)>0:
                 calculated_oid = int(past_list_oids[k-1])-int(present_list_oids[k-1])
-                overall_time = round(t_start-present_occurance_time,1)
+                overall_time = round(occured_time-present_occurance_time,1)
                 calculated_rate_oid = int(calculated_oid/overall_time)
                 if calculated_rate_oid < 0:
                     if observed_oids[k].snmp_type == 'COUNTER32':
